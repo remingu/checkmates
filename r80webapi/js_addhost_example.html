@@ -47,7 +47,7 @@
         req.setRequestHeader("Content-Type", "application/json");
         req.setRequestHeader("X-chkp-sid", sessionid);
         var hostdata = {"host": document.getElementById("host").value,
-                        "ipv4-address": document.getElementById("host").value};
+                        "ipv4-address": document.getElementById("ipv4-address").value};
         hostdata = JSON.stringify(hostdata);
         req.open("POST", "https://<smartcenter-ip>/web_api/add-host");
         req.send(hostdata);
