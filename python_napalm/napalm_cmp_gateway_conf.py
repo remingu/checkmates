@@ -42,8 +42,6 @@ def run() -> None:
     for line in output_gw_b:
         if re.match(regex, line) is None:
             output_stripped_gwb.append(line)
-    output_stripped_gwb.clear()
-    output_stripped_gwb.append('1')
     # compare a with b
     diff_a = [x for x in output_stripped_gwa if x not in output_stripped_gwb]
     # compare b with a
