@@ -26,7 +26,7 @@ def run() -> None:
     output_gateway_a = device.send_expert_cmd('clish -c "show configuration"')
     device.close()
     # remove comments
-    regex = r'#.*|$'
+    regex = r'^#.*|$'
     output_gw_a = str(output_gateway_a).split(('\n'))
     for line in output_gw_a:
         if re.match(regex, line) is None:
