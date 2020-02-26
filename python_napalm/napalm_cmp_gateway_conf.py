@@ -49,11 +49,11 @@ def run() -> None:
     #
     print('configlines on gateway1 not found on gateway2\n\n')
     for line in diff_a:
-        print(line + '\n')
+        print(line)
     print('\n\n')
     print('configlines on gateway2 not found on gateway1\n\n')
     for line in diff_b:
-        print(line + '\n')
+        print(line)
     print('\n\n')
 
 
