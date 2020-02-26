@@ -2,16 +2,21 @@
 from napalm import get_network_driver
 import re
 
-gateway1_ip = '192.168.10.35'
-gateway1_username = 'admin'
-gateway1_password = 'test12'
-gateway1_expertpwd = 'test12'
-gateway2_ip = '192.168.10.35'
-gateway2_username = 'admin'
-gateway2_password = 'test12'
-gateway2_expertpwd = 'test12'
+gateway1_ip = ''
+gateway1_username = ''
+gateway1_password = ''
+gateway1_expertpwd = ''
+gateway2_ip = ''
+gateway2_username = ''
+gateway2_password = ''
+gateway2_expertpwd = ''
 
-def run():
+def run() -> None:
+    """
+        connects to hosts gateway1 & gateway2 enters expert mode,
+        fetches config and compares configuration against each other
+    :return: None
+    """
     driver = get_network_driver('gaiaos')
     output_stripped_gwa, output_stripped_gwb = [], []
     # get config from gateway a
@@ -52,6 +57,7 @@ def run():
     for line in diff_b:
         print(line + '\n')
     print('\n\n')
+
 
 if __name__ == '__main__':
     run()
