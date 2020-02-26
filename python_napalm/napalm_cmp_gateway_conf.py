@@ -49,11 +49,11 @@ def run() -> None:
     # compare b with a
     diff_b = [x for x in output_stripped_gwb if x not in output_stripped_gwa]
     #
-    print('config on host_a not available on host b\n\n')
+    print('configlines on gateway1 not found on gateway2\n\n')
     for line in diff_a:
         print(line + '\n')
     print('\n\n')
-    print('config on host_b not available on host a\n\n')
+    print('configlines on gateway2 not found on gateway1\n\n')
     for line in diff_b:
         print(line + '\n')
     print('\n\n')
