@@ -5,11 +5,10 @@ import re
 gateway1_ip = ''
 gateway1_username = ''
 gateway1_password = ''
-gateway1_expertpwd = ''
 gateway2_ip = ''
 gateway2_username = ''
 gateway2_password = ''
-gateway2_expertpwd = ''
+
 
 def run() -> None:
     """
@@ -20,10 +19,10 @@ def run() -> None:
     driver = get_network_driver('gaiaos')
     output_stripped_gwa, output_stripped_gwb = [], []
     # get config from gateway a
-    device = driver(gateway1_ip, gateway1_username, gateway1_password, optional_args={'secret': gateway1_expertpwd})
+    device = driver(gateway1_ip, gateway1_username, gateway1_password)
     device.open()
-    device.send_expert_cmd('clish -c "lock database override"')
-    output_gateway_a = device.send_expert_cmd('clish -c "show configuration"')
+    
+    output_gateway_a = device.get_config(retrieve='all')
     device.close()
     # remove comments
     regex = r'^#.*|$'
@@ -32,10 +31,9 @@ def run() -> None:
         if re.match(regex, line) is None:
             output_stripped_gwa.append(line)
     # get config from gateway b
-    device = driver(gateway2_ip, gateway2_username, gateway2_password, optional_args={'secret': gateway2_expertpwd})
+    device = driver(gateway2_ip, gateway2_username, gateway2_password)
     device.open()
-    device.send_expert_cmd('clish -c "lock database override"')
-    output_gateway_b = device.send_expert_cmd('clish -c "show configuration"')
+    output_gateway_b = device.get_config(retrieve='all')
     device.close()
     # remove comments
     output_gw_b = str(output_gateway_b).split(('\n'))
