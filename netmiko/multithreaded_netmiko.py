@@ -5,22 +5,32 @@ import sys
 import collections
 from netmiko import ConnectHandler
 
-
-def execute_remote_job(host1):
-    log = logging.getLogger('connecting to ({})'.format(host1))
+# here we define what we want to do on the device, the logging stuff is eye candy 
+def execute_remote_job(target_host, username, password, secret, device_type):
+    log = logging.getLogger('connecting to ({})'.format(target_host))
     log.info('running')
-    device = {'device_type': 'cisco_s300', 'host': '192.168.10.253', 'username': 'cisco', 'password': 'cisco'}
+    # here we assign the parameters for the target system
+    device = {'device_type': device_type, 'host': target_host, 'username': username, 'password': password, 'secret' : secret }
+    # lazy exception handling - assume it fails and only change if it works.
     output = 'connection failed'
     try:
+        # we fetch show run here
+        # commands are obviously platform dependent
+        # this example applies to cisco ios. commands might differ 
         log.info('connect')
+        # open ssh connection to device and pass keyword arguments as dict
+        # the double-* indicates that argument expansion is used
         net_connect = ConnectHandler(**device)
         log.info('find prompt')
+	# get prompt bevor sending a command
         net_connect.find_prompt()
-        log.info('set term len 0')
-        net_connect.send_command('terminal length 0')
+        log.info('set term 0')
+	# set number of lines bevor pausing output on cisco ios to 0 (no pause)
+        net_connect.send_command('terminal length 0') 
+        net_connect.find_prompt()
+        # and here we send sh run and assign answer to output
         log.info('fetch conf')
         output = net_connect.send_command("show run")
-        log.info(output)
         log.info('done')
     except:
         log.info('failed')
@@ -29,26 +39,41 @@ def execute_remote_job(host1):
 
 
 async def run_remote_jobs(executor):
+ 
+    # here we define the device-lists and spawn the threads - we will separate this in later incarnations (tbd) 
     log = logging.getLogger('run remote-jobs')
     log.info('starting')
+    # device list is simply a dictionary
     devices = {'sw1' :
                     {'ip' : '192.168.10.253',
-                     'type' : 'cisco_s300' ,
+                     'type' : 'cisco_ios' ,
                      'user' : 'cisco',
                      'password' : 'cisco',
                      'secret' : 'secret'}}
+    # we require an ordered dict for the iteration within blocking tasks
     devices = collections.OrderedDict(devices)
     log.info('creating remote jobs')
     loop = asyncio.get_event_loop()
+    # run in executor does support argument expansion, therefore use separate params
     blocking_tasks = [
-        loop.run_in_executor(executor, execute_remote_job, 'something')
+        loop.run_in_executor(executor,
+                             execute_remote_job,
+                             devices[device]['ip'],
+                             devices[device]['user'],
+                             devices[device]['password'],
+                             devices[device]['secret'],
+                             devices[device]['type'] 
+        )
+        # here we nest a loop within blocking tasks to iterate to all indices of the ordered dict. 
         for device in devices
     ]
     log.info('waiting for executor tasks')
+    # here we write our results into futures(implicit)
     completed, pending = await asyncio.wait(blocking_tasks)
     results = [t.result() for t in completed]
+    # let's see what we got -  this is asynchronous and will be triggered when a task is completed
     log.info('results: {!r}'.format(results))
-    log.info('exiting')
+    
 
 
 if __name__ == '__main__':
@@ -64,7 +89,7 @@ if __name__ == '__main__':
     executor = concurrent.futures.ThreadPoolExecutor(
         max_workers=8,
     )
-
+    # use asyncio threadexecutor within asyncio main loop
     event_loop = asyncio.get_event_loop()
     try:
         event_loop.run_until_complete(
