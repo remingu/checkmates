@@ -1,3 +1,4 @@
+""" compares gaia os configs for differences """
 #/usr/bin/env python3
 import sys
 import re
