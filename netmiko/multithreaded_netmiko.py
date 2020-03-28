@@ -22,10 +22,10 @@ def execute_remote_job(target_host, username, password, secret, device_type):
         # the double-* indicates that argument expansion is used
         net_connect = ConnectHandler(**device)
         log.info('find prompt')
-	# get prompt bevor sending a command
+         # get prompt bevor sending a command
         net_connect.find_prompt()
         log.info('set term 0')
-	# set number of lines bevor pausing output on cisco ios to 0 (no pause)
+        # set number of lines bevor pausing output on cisco ios to 0 (no pause)
         net_connect.send_command('terminal length 0') 
         net_connect.find_prompt()
         # and here we send sh run and assign answer to output
@@ -45,10 +45,10 @@ async def run_remote_jobs(executor):
     log.info('starting')
     # device list is simply a dictionary
     devices = {'sw1' :
-                    {'ip' : '192.168.10.253',
+                    {'ip' : 'X.X.X.X',
                      'type' : 'cisco_ios' ,
-                     'user' : 'cisco',
-                     'password' : 'cisco',
+                     'user' : 'uid',
+                     'password' : 'pwd',
                      'secret' : 'secret'}}
     # we require an ordered dict for the iteration within blocking tasks
     devices = collections.OrderedDict(devices)
