@@ -45,16 +45,16 @@ async def run_remote_jobs(executor):
     log.info('starting')
     # device list is simply a dictionary
     devices = {'sw1' :
-                    {'ip' : 'X.X.X.X',
-                     'type' : 'cisco_ios' ,
-                     'user' : 'uid',
-                     'password' : 'pwd',
-                     'secret' : 'secret'}}
+                    {'ip': 'X.X.X.X',
+                     'type': 'cisco_ios' ,
+                     'user': 'uid',
+                     'password': 'pwd',
+                     'secret': 'secret'}}
     # we require an ordered dict for the iteration within blocking tasks
     devices = collections.OrderedDict(devices)
     log.info('creating remote jobs')
     loop = asyncio.get_event_loop()
-    # run in executor does support argument expansion, therefore use separate params
+    # run in executor does not support argument expansion, therefore use separate params
     blocking_tasks = [
         loop.run_in_executor(executor,
                              execute_remote_job,
