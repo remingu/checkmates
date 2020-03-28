@@ -64,7 +64,6 @@ async def run_remote_jobs(executor):
                              devices[device]['secret'],
                              devices[device]['type'] 
         )
-        # here we nest a loop within blocking tasks to iterate to all indices of the ordered dict. 
         for device in devices
     ]
     log.info('waiting for executor tasks')
