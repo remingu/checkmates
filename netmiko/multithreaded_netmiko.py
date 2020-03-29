@@ -46,7 +46,7 @@ async def run_remote_jobs(executor):
     # device list is simply a dictionary
     devices = {'sw1' :
                     {'ip': 'X.X.X.X',
-                     'type': 'cisco_ios' ,
+                     'type': 'cisco_ios',
                      'user': 'uid',
                      'password': 'pwd',
                      'secret': 'secret'}}
@@ -83,7 +83,6 @@ if __name__ == '__main__':
         format='%(threadName)10s %(name)18s: %(message)s',
         stream=sys.stderr,
     )
-
     # Create a limited thread pool.
     executor = concurrent.futures.ThreadPoolExecutor(
         max_workers=8,
