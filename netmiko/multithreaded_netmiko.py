@@ -5,6 +5,8 @@ import sys
 import collections
 from netmiko import ConnectHandler
 
+# ! read from bottom !
+
 # here we define what we want to do on the device, the logging stuff is eye candy 
 def execute_remote_job(target_host, username, password, secret, device_type):
     log = logging.getLogger('connecting to ({})'.format(target_host))
