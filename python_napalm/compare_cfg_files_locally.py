@@ -1,5 +1,5 @@
 """ compares gaia os configs for differences """
-#/usr/bin/env python3
+#!/usr/bin/env python3
 import sys
 import re
 import os
@@ -25,10 +25,12 @@ def read_files(file1, file2):
     cfg_a, cfg_b = [], []
     with open(file1, 'r') as fh:
         for line in fh:
+            # filter for comments and empty lines first
             if re.match(regex, line) is None:
                 cfg_a.append(line)
     with open(file2, 'r') as fh:
         for line in fh:
+            # filter for comments and empty lines first
             if re.match(regex, line) is None:
                 cfg_b.append(line)
     return (cfg_a, cfg_b)
