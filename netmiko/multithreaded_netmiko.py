@@ -71,6 +71,7 @@ async def run_remote_jobs(executor):
     log.info('waiting for executor tasks')
     # here we write our results into futures(implicit)
     completed, pending = await asyncio.wait(blocking_tasks)
+    # we could use a loop aswell, but list comprehension is way more pythonic
     results = [t.result() for t in completed]
     # let's see what we got -  this is asynchronous and will be triggered when a task is completed
     log.info('results: {!r}'.format(results))
